@@ -2,9 +2,9 @@ let mainButton = document.getElementById("mainButton");
 let videoNameHeader = document.getElementById("videoNameHeader");
 let urlDisplay = document.getElementById("urlDisplay");
 
-function retrievePageDetails() {
-  console.log('loaded retrieve.js script')
-  chrome.storage.local.set({
+async function retrievePageDetails() {
+  console.log("retrieving page details")
+  await chrome.storage.local.set({
     "url": location.href,
     "page_title": document.title
   }, (data) => {
@@ -12,17 +12,24 @@ function retrievePageDetails() {
   })
 }
 
+async function injectScript(tab, func) {
+  await chrome.scripting.executeScript({
+    target: {tabId: tab},
+    function: func
+  })
+}
 
 mainButton.addEventListener("click", async () => {
   console.log('button clicked')
-  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  chrome.scripting.executeScript({
-    target: {tabId: tab.id},
-    function: retrievePageDetails
-  })
+  let [tab] = await chrome.tabs.query({
+    active: true,
+    currentWindow: true
+  });
+
+  await injectScript(tab=tab.id, func=retrievePageDetails)
 
   chrome.storage.local.get(["url", "page_title"], (result) => {
-    urlDisplay.innerHTML = urlDisplay.innerHTML.replace("placeholder", `<a href=${result.url}>${result.page_title}</a>`)
+    urlDisplay.innerHTML = urlDisplay.innerHTML.replace("placeholder", `<a target="_blank" href=${result.url}>${result.page_title}</a>`)
   })
 })
 
