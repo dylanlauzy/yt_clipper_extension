@@ -1,35 +1,41 @@
-let mainButton = document.getElementById("mainButton");
-let videoNameHeader = document.getElementById("videoNameHeader");
-let urlDisplay = document.getElementById("urlDisplay");
+// Variables
+// let channelName = document.querySelector("#upload-info #text-container a")
+let popupTitle = document.querySelector(".popup-title")
+
+
+// Functions
+async function injectScript(tab, func) {
+  await chrome.scripting.executeScript({target: {tabId: tab}, function: func})
+  if(func.displayName) {
+    console.log("Following function injected: " + func.displayName)
+  }
+  else {
+    console.log("No function name found")
+  }
+}
 
 async function retrievePageDetails() {
   console.log("retrieving page details")
   await chrome.storage.local.set({
     "url": location.href,
     "page_title": document.title
-  }, (data) => {
-    console.log(data)
+  })
+  await chrome.storage.local.get(["url", "page_title"], (result) => {
+    console.log("data retrieved:\n", result)
   })
 }
 
-async function injectScript(tab, func) {
-  await chrome.scripting.executeScript({
-    target: {tabId: tab},
-    function: func
-  })
+async function initialise() {
+  let [tab] = await chrome.tabs.query({active: true, currentWindow: true
+});
+  console.log("tab info: ", tab)
+  await injectScript(tab.id, retrievePageDetails)
 }
 
-mainButton.addEventListener("click", async () => {
-  console.log('button clicked')
-  let [tab] = await chrome.tabs.query({
-    active: true,
-    currentWindow: true
-  });
+// Functionality
+initialise()
 
-  await injectScript(tab=tab.id, func=retrievePageDetails)
-
-  chrome.storage.local.get(["url", "page_title"], (result) => {
-    urlDisplay.innerHTML = urlDisplay.innerHTML.replace("placeholder", `<a target="_blank" href=${result.url}>${result.page_title}</a>`)
-  })
+chrome.storage.local.get(["url", "page_title"], async (result) => {
+  popupTitle.innerHTML = await popupTitle.innerHTML.replace("Sample Text", result.page_title)
+  console.log("Title refreshed")
 })
-

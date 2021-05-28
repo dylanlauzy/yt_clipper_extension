@@ -1,19 +1,59 @@
-.wrapper {
-  width: 300px;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-size: 14px;
+  --primary-font: 'Inter', sans-serif;
+}
+
+
+li {
+  list-style: none;
+}
+
+.footer {
+  justify-content: space-between;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.popup-container {
+  width: 388px;
   max-height: 400px;
-  padding: 1em;
+  padding: 1em 1.5em;
+  /* border-radius: 20px; */
+  background: #f5f5f5;
+  box-shadow: 2px 2px 2px 0px #4f4f4f;
+  font-family: var(--primary-font);
 }
 
-button {
-  height: 30px;
+.popup-title {
+  font-weight: 500;
+  font-size: 18px;
+
+}
+
+  .popup-container textarea {
   width: 100%;
-  outline: none;
-  border: none;
-  border-radius: 2px;
-  cursor: pointer;
+  resize: none;
+  height: 86px;
+  font-family: inherit;
+  margin-bottom: 0.5em;
 }
 
-button.current {
-  box-shadow: 0 0 0 2px white,
-              0 0 0 4px black;
+.tool-icon-button {
+  background: grey;
+  height: 22px;
+  width: 25px;
+}
+
+.popup-container input[type="submit"] {
+  width: 68px;
 }
