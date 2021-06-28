@@ -12,7 +12,8 @@
   "content_scripts":[
     {
       "matches": ["https://*.youtube.com/watch*"],
-      "js": ["youtube_content.js"]
+      "js": ["youtube_content.js"],
+      "css": ["./popup/style/style.css"]
     }
   ],
   "background":{
