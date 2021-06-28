@@ -9,13 +9,6 @@
       "48": "/icons/get_started48.png",
       "128": "/icons/get_started128.png"
   },
-  "content_scripts":[
-    {
-      "matches": ["https://*.youtube.com/watch*"],
-      "js": ["youtube_content.js"],
-      "css": ["./popup/style/style.css"]
-    }
-  ],
   "background":{
       "service_worker": "background.js"
   },

@@ -1,11 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 
-.display-none {
-  display:none;
-}
-
 .ytclipper-popup-container {
-  z-index: 100000;
+  z-index: 2147483647;
   position: fixed;
   top:60px;
   right: 10px;
