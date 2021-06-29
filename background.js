@@ -1,4 +1,3 @@
-chrome.storage.sync.clear()
 // Functions
 function sendMessage(tab, message) {
   chrome.tabs.sendMessage(tab, msg = {txt: message})
@@ -29,8 +28,8 @@ async function storeVideoInfo() {
   
   console.log("retrieving video info for video id: " + video_id)
 
-  let setObj = {}
-  setObj[video_id] = {
+  let videoData = {}
+  videoData[video_id] = {
     "video_title": videoTitle.innerText,
     "channel_name": channelName.innerText,
     "time_saved": {
@@ -39,37 +38,62 @@ async function storeVideoInfo() {
       "day": today.getDate(),
       "month": today.getMonth() + 1,
       "year": today.getFullYear(),
-    }
+    },
+    "notes": []
   }
-  console.log("setObj:\n", setObj)
-  await chrome.storage.sync.set(setObj)
-  await chrome.storage.sync.get([video_id], (result) => {console.log("video info stored successfully\n","data saved to storage:", result)})
+  await chrome.storage.sync.set(videoData)
+  await chrome.storage.sync.get([video_id], (data) => {
+    console.log("video info stored successfully\n","data saved to storage:", data)
+  })
 }
 
 async function togglePopup() {
   let video_id = window.location.href.match(/(\?|&)v=[^&]+/)[0].slice(3)
+  let videoPlayer = document.querySelector("video.video-stream")
   let popupElem = document.querySelector(".ytclipper-popup-container")
   if (popupElem) {
     popupElem.remove()
   }
   else {
     await chrome.storage.sync.get([video_id], (data) => {
-      console.log("Generating popup...\n Data Retrieved:")
-      console.log(data)
-  
+      console.log("Generating popup...\n Data Retrieved:", data)
+      
       let newPopup = document.createElement("div")
       newPopup.classList.add("ytclipper-popup-container")
-      newPopup.innerHTML =`<div class="popup-title">${data[video_id].video_title}</div><textarea name="" class="note-input" placeholder="start typing..."></textarea><div class="footer flex-container"><div class="toolbar"><ul class="tools flex-container"><li class="tool-icon-wrap"><button class="tool-icon-button bold-icon">B</button></li><li class="tool-icon-wrap"><button class="tool-icon-button italic-icon">I</button></li><li class="tool-icon-wrap"><button class="tool-icon-button strikethrough-icon">S</button></li><li class="tool-icon-wrap"><button class="tool-icon-button code-icon">C</button></li><li class="tool-icon-wrap"><button class="tool-icon-button link-icon">L</button></li><li class="tool-icon-wrap"><button class="tool-icon-button ol-icon">1.</button></li><li class="tool-icon-wrap"><button class="tool-icon-button ul-icon">&#8226;</button></li><li class="tool-icon-wrap"><button class="tool-icon-button quote-icon">"</button></li><li class="tool-icon-wrap"><button class="tool-icon-button codeblock-icon">[]</button></li></ul></div><input type="submit" value="enter"></div>`
+      newPopup.innerHTML =`<div class="popup-title">${data[video_id].video_title}</div><textarea name="" class="note-input" placeholder="start typing..."></textarea><div class="footer flex-container"><div class="toolbar"><ul class="tools flex-container"><li class="tool-icon-wrap"><button class="tool-icon-button bold-icon">B</button></li><li class="tool-icon-wrap"><button class="tool-icon-button italic-icon">I</button></li><li class="tool-icon-wrap"><button class="tool-icon-button strikethrough-icon">S</button></li><li class="tool-icon-wrap"><button class="tool-icon-button code-icon">C</button></li><li class="tool-icon-wrap"><button class="tool-icon-button link-icon">L</button></li><li class="tool-icon-wrap"><button class="tool-icon-button ol-icon">1.</button></li><li class="tool-icon-wrap"><button class="tool-icon-button ul-icon">&#8226;</button></li><li class="tool-icon-wrap"><button class="tool-icon-button quote-icon">"</button></li><li class="tool-icon-wrap"><button class="tool-icon-button codeblock-icon">[]</button></li></ul></div><button class="enter-btn">enter</button></div>`
       document.body.appendChild(newPopup)
+      console.log("popup generated")
+      
+      let textareaElem = document.querySelector(".note-input")
+      let enterBtn = document.querySelector(".enter-btn")
+      enterBtn.addEventListener("click", () => {
+        console.log("enter clicked")
+        let noteInput = textareaElem.value
+        if(noteInput != "") {
+          let noteData = {}
+          let regExp = /.+(?=\n+)/
+          noteData.time_stamp = Math.floor(videoPlayer.currentTime)
+          if(regExp.test(noteInput)) {
+            noteData.header = noteInput.match(regExp)[0].trim()
+            noteData.content = noteInput.replace(regExp, "").trim()
+          }
+          else {
+            noteData.content = noteInput
+          }
+          data[video_id].notes.push(noteData)
+          chrome.storage.sync.set(data)
+          console.log("note saved:\n", noteData)
+        }
+      })
+      textareaElem.focus()
     })
-
-    console.log("popup generated")
   }
 }
 
 // Listeners
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('YouTube clipper extension installed')
+  chrome.storage.sync.clear()
+  console.log('YouTube clipper extension installed and sync data cleared')
 })
 
 chrome.action.onClicked.addListener(async (tab) => {
