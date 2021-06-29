@@ -83,6 +83,8 @@ async function togglePopup() {
           data[video_id].notes.push(noteData)
           chrome.storage.sync.set(data)
           console.log("note saved:\n", noteData)
+          let popupElem = document.querySelector(".ytclipper-popup-container")
+          popupElem.remove()
         }
       })
       textareaElem.focus()
