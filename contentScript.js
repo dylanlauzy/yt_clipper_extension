@@ -97,6 +97,7 @@ const generatePopup = () => {
   const noteInputElem = document.createElement("input");
   const submitElem = document.createElement("button");
   const submitIconElem = document.createElement("img")
+  const exportElem = document.createElement("button");
   
   containerElem.className = "ytclipper-popup-container"
   
@@ -120,12 +121,16 @@ const generatePopup = () => {
   containerElem.appendChild(titleElem)
   containerElem.appendChild(channelElem)
   containerElem.appendChild(formElem)
-  documentBody.appendChild(containerElem)
 
   for(i in currentVideoInfo.notes) {
     addNoteElement(containerElem, currentVideoInfo.notes[i])
   }
 
+  exportElem.textContent =  "Export Notes";
+  exportElem.addEventListener("click", copyNotes);
+  containerElem.appendChild(exportElem);
+
+  documentBody.appendChild(containerElem)
   noteInputElem.focus()
 }
 
@@ -193,4 +198,24 @@ const getTime = (seconds) => {
   date.setSeconds(seconds);
   
   return seconds >= 3600 ? date.toISOString().substring(11, 19) : date.toISOString().substring(14, 19);
+}
+
+const copyNotes = () => {
+  let outputString = "";
+
+  for (i in currentVideoInfo.notes) {
+    outputString = outputString.concat(formatNote(currentVideoInfo.notes[i]) + "\n\n");
+  }
+
+  console.log(outputString);
+
+  navigator.clipboard.writeText(outputString);
+}
+
+const formatNote = (noteObj) => {
+  let timestamp = noteObj.timestamp;
+  let noteContent = noteObj.noteBody;
+  console.log(noteContent);
+
+  return `${getTime(timestamp)} ${noteContent}`
 }
