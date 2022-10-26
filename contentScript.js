@@ -122,14 +122,14 @@ const generatePopup = () => {
   containerElem.appendChild(channelElem)
   containerElem.appendChild(formElem)
 
-  for(i in currentVideoInfo.notes) {
-    addNoteElement(containerElem, currentVideoInfo.notes[i])
-  }
-
   exportElem.textContent =  "Export Notes";
   exportElem.addEventListener("click", copyNotes);
   containerElem.appendChild(exportElem);
 
+  for(i in currentVideoInfo.notes) {
+    addNoteElement(containerElem, currentVideoInfo.notes[i])
+  }
+  
   documentBody.appendChild(containerElem)
   noteInputElem.focus()
 }
@@ -139,16 +139,23 @@ const newNote = (event) => {
   
   const timestamp = youtubeVideoPlayer.currentTime
   const noteInputElem = document.getElementsByClassName("note-input")[0]
-  const newNote = {
-    timestamp: timestamp,
-    noteBody: noteInputElem.value,
-    firstCreated: new Date()
-  }
+  const newNote =  newNoteObj(timestamp, noteInputElem.value, new Date())
 
-  currentVideoInfo["notes"] = [...currentVideoInfo["notes"], newNote]
-  chrome.storage.sync.set({[currentVideo]: JSON.stringify(currentVideoInfo)})
+  saveNote(newNote)
   noteInputElem.value = ""
   addNoteElement(noteInputElem.parentNode.parentNode, newNote)
+}
+
+const saveNote = (noteObj, newNote = true) => {
+  if (newNote) {
+    currentVideoInfo["notes"] = [...currentVideoInfo["notes"], noteObj]
+    
+  } else {
+    const replaceIndex =  currentVideoInfo["notes"].findIndex((elem) => elem.timestamp == noteObj.timestamp);
+    currentVideoInfo["notes"] = currentVideoInfo["notes"].splice(replaceIndex, 1, noteObj);
+  }
+
+  chrome.storage.sync.set({[currentVideo]: JSON.stringify(currentVideoInfo)})
 }
 
 const addNoteElement = (parentElem, note) => {
@@ -161,6 +168,7 @@ const addNoteElement = (parentElem, note) => {
 
   noteControlsElem.className = "note-controls";
   setBookmarkAttributes("play", onPlay, noteControlsElem);
+  setBookmarkAttributes("edit", onEdit, noteControlsElem);
   setBookmarkAttributes("delete", onDelete, noteControlsElem);
 
   noteContainerElem.id = "note-" + note.timestamp;
@@ -172,16 +180,46 @@ const addNoteElement = (parentElem, note) => {
   parentElem.appendChild(noteContainerElem);
 }
 
+const newNoteObj = (timestamp, noteBody, firstCreated) => {
+  return {
+    timestamp: timestamp,
+    noteBody: noteBody, 
+    firstCreated: firstCreated
+  }
+}
+
 const onPlay = async e => {
   youtubeVideoPlayer.currentTime = e.target.parentNode.parentNode.getAttribute("timestamp")
 };
 
+const onEdit = async e => {
+  const noteContainer = e.target.parentNode.parentNode
+  const noteTimestamp = noteContainer.getAttribute("timestamp")
+  const noteBody = noteContainer.firstChild;
+  
+  const noteEditInput = document.createElement("input");
+  noteEditInput.type = "text";
+  noteEditInput.value = noteBody.textContent.substring(noteBody.textContent.indexOf("-") + 2)
+
+  noteBody.style.display = "none";
+  noteContainer.insertBefore(noteEditInput, noteBody);
+
+  noteEditInput.focus();
+  noteEditInput.select();
+  noteEditInput.addEventListener('focusout', (e) => {
+    noteBody.textContent = `${getTime(noteTimestamp)} - ${noteEditInput.value}`
+    noteEditInput.remove();
+    noteBody.style.display = "block";
+    saveNote(newNoteObj(noteTimestamp, noteEditInput.value, new Date()), false)
+  })
+}
+
 const onDelete = async e => {
   const noteToDelete = e.target.parentNode.parentNode
-  const noteTimestamp = noteToDelete.getAttribute("timestsamp")
+  const noteTimestamp = noteToDelete.getAttribute("timestamp")
   noteToDelete.remove()
 
-  currentVideoInfo["notes"] = currentVideoInfo["notes"].filter((note) => {note.timestamp != noteTimestamp})
+  currentVideoInfo["notes"] = currentVideoInfo["notes"].filter((note) => note.timestamp != noteTimestamp)
   chrome.storage.sync.set({[currentVideo]: JSON.stringify(currentVideoInfo)})
 };
 
@@ -207,7 +245,7 @@ const copyNotes = () => {
     outputString = outputString.concat(formatNote(currentVideoInfo.notes[i]) + "\n\n");
   }
 
-  console.log(outputString);
+  console.log("copied notes to clipboard:\n" + outputString);
 
   navigator.clipboard.writeText(outputString);
 }
@@ -215,7 +253,5 @@ const copyNotes = () => {
 const formatNote = (noteObj) => {
   let timestamp = noteObj.timestamp;
   let noteContent = noteObj.noteBody;
-  console.log(noteContent);
-
   return `${getTime(timestamp)} ${noteContent}`
 }
