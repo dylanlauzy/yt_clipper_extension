@@ -98,6 +98,7 @@ const generatePopup = () => {
   const submitElem = document.createElement("button");
   const submitIconElem = document.createElement("img")
   const exportElem = document.createElement("button");
+  const notesContainer = document.createElement("div");
   
   containerElem.className = "ytclipper-popup-container"
   
@@ -126,9 +127,12 @@ const generatePopup = () => {
   exportElem.addEventListener("click", copyNotes);
   containerElem.appendChild(exportElem);
 
+  notesContainer.className = "notes-container";
   for(i in currentVideoInfo.notes) {
-    addNoteElement(containerElem, currentVideoInfo.notes[i])
+    addNoteElement(notesContainer, currentVideoInfo.notes[i])
   }
+
+  containerElem.appendChild(notesContainer);
   
   documentBody.appendChild(containerElem)
   noteInputElem.focus()
@@ -136,25 +140,18 @@ const generatePopup = () => {
 
 const newNote = (event) => {
   event.preventDefault()
-  
+  const notesContainer = document.getElementsByClassName("notes-container")[0];
   const timestamp = youtubeVideoPlayer.currentTime
   const noteInputElem = document.getElementsByClassName("note-input")[0]
   const newNote =  newNoteObj(timestamp, noteInputElem.value, new Date())
 
   saveNote(newNote)
   noteInputElem.value = ""
-  addNoteElement(noteInputElem.parentNode.parentNode, newNote)
+  addNoteElement(notesContainer, newNote)
 }
 
-const saveNote = (noteObj, newNote = true) => {
-  if (newNote) {
-    currentVideoInfo["notes"] = [...currentVideoInfo["notes"], noteObj]
-    
-  } else {
-    const replaceIndex =  currentVideoInfo["notes"].findIndex((elem) => elem.timestamp == noteObj.timestamp);
-    currentVideoInfo["notes"] = currentVideoInfo["notes"].splice(replaceIndex, 1, noteObj);
-  }
-
+const saveNote = (noteObj) => {
+  currentVideoInfo["notes"] = [...currentVideoInfo["notes"], noteObj]
   chrome.storage.sync.set({[currentVideo]: JSON.stringify(currentVideoInfo)})
 }
 
@@ -207,10 +204,13 @@ const onEdit = async e => {
   noteEditInput.focus();
   noteEditInput.select();
   noteEditInput.addEventListener('focusout', (e) => {
+    let replaceIndex =  currentVideoInfo["notes"].findIndex((elem) => elem.timestamp == noteTimestamp);
+    currentVideoInfo["notes"][replaceIndex]["noteBody"] = noteEditInput.value;
+    chrome.storage.sync.set({[currentVideo]: JSON.stringify(currentVideoInfo)});
+
     noteBody.textContent = `${getTime(noteTimestamp)} - ${noteEditInput.value}`
     noteEditInput.remove();
     noteBody.style.display = "block";
-    saveNote(newNoteObj(noteTimestamp, noteEditInput.value, new Date()), false)
   })
 }
 

@@ -7,11 +7,10 @@
   right: 10px;
   width: 388px;
   padding: 8px 5px;
-  /* border-radius: 20px; */
+  border-radius: 20px;
   background: rgba(238, 238, 238, 0.9);
   color: rgb(28, 28, 28);
   font-family: var(--primary-font);
-  
   font-size: 14px;
 
   * {
@@ -61,5 +60,9 @@
   .note-controls {
     text-align: right;
   }
-  
+
+  .notes-container {
+    max-height: 20vh;
+    overflow-y: scroll;
+  }
 }
