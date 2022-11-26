@@ -7,7 +7,7 @@ I take a lot of notes on YouTube videos with a Notion/Logseq page open beside my
 The extension's core functionality includes:
 - Storing data about a saved video - Title, Channel, URL, Date of Access
 - Providing a button/shortcut for storing video info and opening a pop-up UI over the YouTube website
-- Enabling note-taking via the UI that saves details such as a timestamp and note-content
+- Enabling note-taking via GUI that saves details such as a timestamp and note-content
 - Displaying the notes that have been taken for a video and providing the option to delete and edit them
 - Providing a playback button for each note that brings the video back to the time where that note was taken
 - Enabling exporting of those notes in the format that I use for my Notion and Logseq databases
