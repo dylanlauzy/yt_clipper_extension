@@ -1,0 +1,22 @@
+{
+  "name": "yt_clipper_extension",
+  "version": "1.0.0",
+  "description": "Youtube Clipper Extension",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dylanlauzy/yt_clipper_extension.git"
+  },
+  "author": "Dylan Lau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dylanlauzy/yt_clipper_extension/issues"
+  },
+  "homepage": "https://github.com/dylanlauzy/yt_clipper_extension#readme",
+  "dependencies": {
+    "tailwindcss": "^3.2.4"
+  }
+}

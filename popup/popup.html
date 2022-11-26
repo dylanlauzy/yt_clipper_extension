@@ -1,35 +1,67 @@
-<iframe>
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>YT Clipper Popup</title>
-      <style>@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");.display-none{display:none}.yt-clipper-popup-container{z-index:2147483647;position:fixed;top:60px;right:10px;width:388px;max-height:400px;padding:1em 1.5em;background:#f5f5f5;-webkit-box-shadow:2px 2px 2px 0px #4f4f4f;box-shadow:2px 2px 2px 0px #4f4f4f;font-family:var(--primary-font);font-size:14px;--primary-font: 'Inter', sans-serif}.yt-clipper-popup-container *{-webkit-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0}.yt-clipper-popup-container li{list-style:none}.yt-clipper-popup-container .footer{-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.yt-clipper-popup-container .flex-container{display:-webkit-box;display:-ms-flexbox;display:flex}.yt-clipper-popup-container .popup-title{font-weight:500;font-size:18px}.yt-clipper-popup-container textarea{width:100%;resize:none;height:86px;font-family:inherit;margin-bottom:0.5em}.yt-clipper-popup-container .tool-icon-button{background:grey;height:22px;width:25px}.yt-clipper-popup-container input[type="submit"]{width:68px}</style>
-    </head>
-    <body>
-      <div class="yt-clipper-popup-container">
-        <div class="popup-title">Sample Text</div>
-        <textarea name="" class="note-input" placeholder="start typing..."></textarea>
-        <div class="footer flex-container">
-          <div class="toolbar">
-            <ul class="tools flex-container">
-              <li class="tool-icon-wrap"><button class="tool-icon-button bold-icon">B</button></li>
-              <li class="tool-icon-wrap"><button class="tool-icon-button italic-icon">I</button></li>
-              <li class="tool-icon-wrap"><button class="tool-icon-button strikethrough-icon">S</button></li>
-              <li class="tool-icon-wrap"><button class="tool-icon-button code-icon">C</button></li>
-              <li class="tool-icon-wrap"><button class="tool-icon-button link-icon">L</button></li>
-              <li class="tool-icon-wrap"><button class="tool-icon-button ol-icon">1.</button></li>
-              <li class="tool-icon-wrap"><button class="tool-icon-button ul-icon">&#8226;</button></li>
-              <li class="tool-icon-wrap"><button class="tool-icon-button quote-icon">"</button></li>
-              <li class="tool-icon-wrap"><button class="tool-icon-button codeblock-icon">[]</button></li>
-            </ul>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link href="../dist/output.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="ytclipper-popup-container rounded-2xl px-4 py-2 flex flex-col gap-y-2">
+      <div class="logo flex gap-x-1">
+        <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+        <div class="text-sm font-semibold">clippit</div>
+      </div>
+      <div class="rounded-2xl bg-slate-200 px-4 py-2">
+        <div class="flex gap-x-4">
+          <div class="flex justify-center align-center w-14 h-11 self-center bg-emerald-100 rounded-xl">
+            <svg class="w-6 fill-emerald-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"/></svg>
           </div>
-          <button class="enter-btn">enter</button>
+          <div>
+            <h1 class="text-xl font-bold">All-In Podcast</h1>
+            <h2 class="text-sm font-medium">
+              Get the Hornets commentator a glass of water 😂
+            </h2>
+          </div>
         </div>
       </div>
-      <script src="popup.js"></script>
-    </body>
-    </html>
-  </iframe>
+      <form class="flex h-12 gap-x-2">
+        <textarea class="border-2 grow resize-none"></textarea>
+        <button>
+          <div class="flex justify-center align-center w-12 h-12 rounded-xl bg-blue-100">
+            <svg class="fill-blue-400 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/></svg>
+          </div>
+        </button>
+      </form>
+      <div class="notes-container max-h-20 overflow-y-scroll flex flex-col gap-y-2">
+        <div id="note-5.947063" class="flex flex-row bg-slate-100 px-4 py-2 rounded-2xl" timestamp="5.947063">
+          <div class="note-body grow">00:05 - dylan</div>
+          <div class="flex gap-x-1">
+            <svg class="fill-emerald-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
+            <svg class="fill-blue-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+            <svg class="fill-red-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+          </div>
+        </div>
+        <div id="note-5.947063" class="flex flex-row bg-slate-100 px-4 py-2 rounded-2xl" timestamp="5.947063">
+          <div class="note-body grow">00:05 - dylan</div>
+          <div class="flex gap-x-1">
+            <svg class="fill-emerald-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
+            <svg class="fill-blue-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+            <svg class="fill-red-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+          </div>
+        </div>
+        <div id="note-5.947063" class="flex flex-row bg-slate-100 px-4 py-2 rounded-2xl" timestamp="5.947063">
+          <div class="note-body grow">00:05 - dylan</div>
+          <div class="flex gap-x-1">
+            <svg class="fill-green-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
+            <svg class="fill-blue-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+            <svg class="fill-red-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+          </div>
+        </div>
+      </div>
+      <button class="bg-purple-400 text-white rounded-2xl py-2 text-sm font-medium">Export Notes</button>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.ytclipper-popup-container {
+  z-index: 99999;
+  position: fixed;
+  top: 60px;
+  right: 10px;
+  width: 388px;
+  border-radius: 20px;
+  background: rgba(238, 238, 238, 0.9);
+  color: #1c1c1c;
+  font-family: var(--primary-font);
+  font-size: 14px;
+}
+.ytclipper-popup-container form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.ytclipper-popup-container input {
+  width: 100%;
+}
+/*# sourceMappingURL=popup-style.css.map */
