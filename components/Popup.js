@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
+import Logo from "./Logo "
+import Header from "./Header";
 
 const Popup = () => {
   const [videoInfo, updateVideoInfo] = useState({
