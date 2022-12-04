@@ -1,7 +1,20 @@
-// Variables
+// Variables 
 let currentVideo = "";
 let currentVideoInfo = {};
-let youtubeLeftControls, youtubeVideoPlayer, titleElem, channelElem;
+let youtubeLeftControls, youtubeVideoPlayer, titleElem, channelElem, noteInputElem;
+
+// Constants
+const iconData = {
+  "play": {
+    html: `<svg class="fill-green-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path class="pointer-events-none" d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>`,
+  },
+  "edit": {
+    html: `<svg class="fill-blue-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path class="pointer-events-none" d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>`,
+  },
+  "delete": {
+    html: `<svg class="fill-red-500 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path class="pointer-events-none" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>`,
+  }
+}
 
 // Message Responses
 chrome.runtime.onMessage.addListener((obj, sender, response) => {
@@ -33,9 +46,9 @@ const videoLoaded = async () => {
   const noteBtnExists = document.getElementsByClassName("note-btn")[0];
 
   if (!noteBtnExists) {
-      const noteBtn = document.createElement("img");
-      noteBtn.src = chrome.runtime.getURL("assets/bookmark.png");
-      noteBtn.className = "ytp-button " + "note-btn";
+      const noteBtn = document.createElement("button");
+      noteBtn.innerHTML = `<svg class="w-5 m0 m-auto fill-zinc-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H288V368c0-26.5 21.5-48 48-48H448V96c0-35.3-28.7-64-64-64H64zM448 352H402.7 336c-8.8 0-16 7.2-16 16v66.7V480l32-32 64-64 32-32z"/></svg>`
+      noteBtn.className = "ytp-button note-btn flex";
       noteBtn.title = "click to start taking notes";
 
       youtubeLeftControls = document.getElementsByClassName("ytp-left-controls")[0];
@@ -61,15 +74,6 @@ const fetchVideoData = async () => {
         })
     })
   })
-}
-
-
-const editNote = () => {
-  
-}
-
-const deleteNote = () => {
-  
 }
 
 const togglePopup = async () => {
@@ -122,7 +126,6 @@ const generateFormElem = () => {
         <svg class="fill-blue-400 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/></svg>
       </div>
     </button>`
-
   formElem.addEventListener("submit", newNote)
   return formElem
 }
@@ -151,10 +154,11 @@ const generatePopup = () => {
     addNoteElement(notesContainer, currentVideoInfo.notes[i])
   }
   containerElem.appendChild(notesContainer);
-
+  
   containerElem.appendChild(generateExportButton());
   
   documentBody.appendChild(containerElem)
+  noteInputElem = document.getElementsByClassName("note-input")[0]
   noteInputElem.focus()
 }
 
@@ -162,7 +166,6 @@ const newNote = (event) => {
   event.preventDefault()
   const notesContainer = document.getElementsByClassName("notes-container")[0];
   const timestamp = youtubeVideoPlayer.currentTime
-  const noteInputElem = document.getElementsByClassName("note-input")[0]
   const newNote =  newNoteObj(timestamp, noteInputElem.value, new Date())
 
   saveNote(newNote)
@@ -210,7 +213,7 @@ const onPlay = async e => {
 };
 
 const onEdit = async e => {
-  const noteContainer = e.target.parentNode.parentNode
+  const noteContainer = e.target.parentNode.parentNode;
   const noteTimestamp = noteContainer.getAttribute("timestamp")
   const noteBody = noteContainer.firstChild;
   
@@ -245,9 +248,9 @@ const onDelete = async e => {
 };
 
 const setBookmarkAttributes =  (src, eventListener, controlParentElem) => {
-  const controlElem = document.createElement("img");
-  controlElem.className = "w-5 h-5 cursor-pointer";
-  controlElem.src = chrome.runtime.getURL("/assets/" + src + ".png")
+  let controlElem = document.createElement("div");
+  controlElem.innerHTML = iconData[src].html;
+  controlElem = controlElem.firstChild
   controlElem.title = src;
   controlElem.addEventListener("click", eventListener);
   controlParentElem.appendChild(controlElem);

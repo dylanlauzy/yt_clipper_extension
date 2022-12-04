@@ -515,6 +515,14 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.pointer-events-none{
+  pointer-events: none;
+}
+
+.m-auto{
+  margin: auto;
+}
+
 .flex{
   display: flex;
 }
@@ -659,6 +667,11 @@ video {
   background-color: rgb(192 132 252 / var(--tw-bg-opacity));
 }
 
+.bg-zinc-200{
+  --tw-bg-opacity: 1;
+  background-color: rgb(228 228 231 / var(--tw-bg-opacity));
+}
+
 .fill-emerald-500{
   fill: #10b981;
 }
@@ -677,6 +690,10 @@ video {
 
 .fill-green-500{
   fill: #22c55e;
+}
+
+.fill-zinc-200{
+  fill: #e4e4e7;
 }
 
 .px-4{
