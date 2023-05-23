@@ -1,4 +1,4 @@
-# YouTube Clipper Chrome Extension
+# YT Clipper Chrome Extension
 
 ## Background
 I take a lot of notes on YouTube videos with a Notion/Logseq page open beside my YouTube player, but often go through the repeatable steps of pausing, switching tabs, recording timestamps and formatting my notes to my liking. I've looked for a good solution to automating this process with a note-taking extension for YouTube but wasn't able to find any so I've decided to program my own solution tailored to my needs.
